@@ -71,6 +71,37 @@ build_df('*O_',4,'merged_order.xlsx')
 build_df('*F_',5,'merged_family.xlsx')
 build_df('*G_',6,'merged_genus.xlsx')
 
+#use a loop instead
+loop_build_df<-function(level_str,level_int,filename){
+file_rename(level_str)
+file_list<-c("EGS_Control_.xlsx","EGS_Control_stomach_.xlsx","EGS_Control_ileum_.xlsx",
+"EGS_Control_caecum_.xlsx","EGS_Control_colon_.xlsx","EGS_Control_faeces_.xlsx",
+"EGS_Co-Grazing_faeces_.xlsx")
+up_to_now<-c()
+for (i in 1:length(file_list)){
+df<-data.frame(read_excel(file_list[i],sheet=1))
+union_otu<-union(df$OTU,up_to_now)
+up_to_now<-union_otu
+}
+otus<-up_to_now
+merge_table<-data.frame(OTU=rownames(taxa_otu[otus,]),taxa_otu[otus,1:level_int])
+name_list<- c("EGS_Control_overall","EGS_Control_stomach","EGS_Control_ileum",
+"EGS_Control_caecum","EGS_Control_colon","EGS_Control_faeces","EGS_Co-Grazing_faeces")
+for (i in 1:length(name_list)){
+df<-data.frame(read_excel(file_list[i],sheet=1))
+merge_table$LFC<-df$log2FoldChange[match(rownames(merge_table),df$OTU)]#to create the columns
+names(merge_table)[names(merge_table) == "LFC"] <- paste(name_list[i],'LFC')#to rename the coloums
+merge_table$padj<-df$padj[match(rownames(merge_table),df$OTU)]#to create the columns
+names(merge_table)[names(merge_table) == "padj"] <-paste(name_list[i],'padj')#to rename the coloums
+}
+write_xlsx(merge_table,filename)
+}
+
+loop_build_df('*P_',2,'merged_phylum.xlsx')
+loop_build_df('*C_',3,'merged_class.xlsx')
+loop_build_df('*O_',4,'merged_order.xlsx')
+loop_build_df('*F_',5,'merged_family.xlsx')
+loop_build_df('*G_',6,'merged_genus.xlsx')
 
 
 
