@@ -185,7 +185,7 @@ x<-otu_table(physeqobj)[,sample_data(physeqobj)$category=='EGS']
 zeros<-data.frame(apply(x,1,function(y) length(which(y == 0))))
 names(zeros)[1]<-'zcount'
 prev<-phyloseq(
-otu_table(physeqobj)[rownames(subset(zeros,zcount<ncol(x)/2))],
+otu_table(physeqobj)[rownames(subset(zeros,zcount<ncol(x)/2))],#that is prevalence>50%, or less than 50% zero count
 tax_table(physeqobj)[rownames(subset(zeros,zcount<ncol(x)/2))],
 sample_data(physeqobj))
 return (prev)
@@ -195,7 +195,7 @@ summary_table_cat <- function (physeqobj,result,category_str1,category_str2,type
 p_site<- lfcShrink(dds=result, contrast = c("category", category_str1, category_str2), type='ashr')
 p_site<-subset(p_site,padj<0.05)
 p_site<-data.frame(OTU=rownames(p_site),p_site,unlist(tax_table(physeqobj)[row.names(p_site),1:type_int]))
-write_xlsx(p_site,paste(type_str,category_str1,category_str2,'.xls',sep='_'))
+write_xlsx(p_site,paste(type_str,category_str1,category_str2,'.xlsx',sep='_'))
 }
 #put the functions together
 pre_quan_seq_cat <- function (physeqobj,type_str,type_int){
@@ -219,9 +219,6 @@ pre_quan_seq_cat(by_C,'C',3)
 pre_quan_seq_cat(by_O,'O',4)
 pre_quan_seq_cat(by_F,'F',5)
 pre_quan_seq_cat(by_G,'G',6)
-
-
-#something different
 
 
 
