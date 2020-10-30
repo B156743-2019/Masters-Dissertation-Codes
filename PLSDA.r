@@ -62,7 +62,7 @@ dev.off()
 #excution
 plsda_all_sites(physeq1,'PLSDA_OTUs.pdf','OTU')
 plsda_all_sites(by_S,'PLSDA_phylotype.pdf','Phylotype')
-#to show site differences in EGS samples
+#to show site differences in sample groups (EGS and Control)
 site_comparison<- function (physeqobj,category_string,type_string) {
 x<-otu_table(physeqobj)[,sample_data(physeqobj)$category==category_string]
 x<-x[,colnames(x)!='1000']#remove fake sample
@@ -76,7 +76,7 @@ plotIndiv(plsda_xy, ind.names = NULL, ellipse = TRUE, legend =TRUE,title=paste('
 }
 #make the pdf
 pdf('site_comparison.pdf',height=8,width=10)
-site_comparison(physeq1,'EGS','OTU')
+site_comparison(physeq1,'EGS','OTU') #site comparison of EGS at OTU level
 site_comparison(by_S,'EGS','phylotype')
 site_comparison(physeq1,'Control','OTU')
 site_comparison(by_S,'Control','phylotype')
@@ -99,7 +99,7 @@ plotIndiv(plsda_xy, ind.names = names, ellipse = TRUE, legend =TRUE,title=paste(
 pdf('Category_comparison.pdf',height=8,width=10)
 category_comparison(physeq1,'OTU',names_bolean=TRUE,'EGS','Control')
 category_comparison(by_S,'phylotype',names_bolean=TRUE,'EGS','Control')
-category_comparison(physeq1,'OTU',names_bolean=FALSE,'EGS','Control')
+category_comparison(physeq1,'OTU',names_bolean=FALSE,'EGS','Control') #not to show the names, just dots
 category_comparison(by_S,'phylotype',names_bolean=FALSE,'EGS','Control')
 category_comparison(physeq1,'OTU',names_bolean=TRUE,'EGS','Co-Grazing')
 category_comparison(by_S,'phylotype',names_bolean=TRUE,'EGS','Co-Grazing')
@@ -123,7 +123,7 @@ vip_score(physeqobj,'faeces'))
 write_xlsx(df,file_name_string)
 }
 #excution
-plsda_vip(physeq1,'vip_score_top_100_otu.xls')
+plsda_vip(physeq1,'vip_score_top_100_otu.xls') #get the vip scores for sites at OTU level 
 plsda_vip(by_S,'vip_score_top_100_phylotype.xls')
 
 #VIP score for overall comparison
@@ -143,11 +143,11 @@ order=unlist(tax_table(physeqobj)[rownames(head(PLSDA.VIP(plsda_xy)$tab,100))])[
 family=unlist(tax_table(physeqobj)[rownames(head(PLSDA.VIP(plsda_xy)$tab,100))])[,5],
 genus=unlist(tax_table(physeqobj)[rownames(head(PLSDA.VIP(plsda_xy)$tab,100))])[,6],
 species=unlist(tax_table(physeqobj)[rownames(head(PLSDA.VIP(plsda_xy)$tab,100))])[,7],
-vip=head(PLSDA.VIP(plsda_xy)$tab,100))
+vip=head(PLSDA.VIP(plsda_xy)$tab,100))#calculate and store the VIP score
 write_xlsx(df,file_name_string)
 }
 #excution
-vip_overall(physeq1,'EGS_vs_Control_vip_score_top_100_otu.xls')
+vip_overall(physeq1,'EGS_vs_Control_vip_score_top_100_otu.xls') #vip scores for EGS vs Controls
 vip_overall(by_S,'EGS_vs_Control_vip_score_top_100_phylotype.xls')
 #match vip score to the deseq2 results
 #VIP score for all otu
